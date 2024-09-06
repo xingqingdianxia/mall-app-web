@@ -7,6 +7,7 @@ export function fetchContent() {
 	})
 }
 
+
 export function fetchRecommendProductList(params) {
 	return request({
 		method: 'GET',

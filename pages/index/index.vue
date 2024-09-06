@@ -2,20 +2,21 @@
 	<view class="container">
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
-		<view class="mp-search-box">
+		<!-- <view class="mp-search-box">
 			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
-		</view>
+		</view> -->
 		<!-- #endif -->
+
 
 		<!-- 头部轮播 -->
 		<view class="carousel-section">
 			<!-- 标题栏和状态栏占位符 -->
 			<view class="titleNview-placing"></view>
 			<!-- 背景色区域 -->
-			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in advertiseList" :key="index" class="carousel-item" @click="navToAdvertisePage(item)">
-					<image :src="item.pic" />
+				<swiper-item v-for="(item, index) in advertiseList" :key="index" class="carousel-item"
+					@click="navToAdvertisePage(item)">
+					<image :src="item.pic" mode="aspectFill" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -25,143 +26,56 @@
 				<text class="num">{{swiperLength}}</text>
 			</view>
 		</view>
-		<!-- 头部功能区 -->
-		<view class="cate-section">
-			<view class="cate-item">
-				<image src="/static/temp/c3.png"></image>
-				<text>专题</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c5.png"></image>
-				<text>话题</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c6.png"></image>
-				<text>优选</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c7.png"></image>
-				<text>特惠</text>
-			</view>
-		</view>
 
-		<!-- 品牌制造商直供 -->
-		<view class="f-header m-t" @click="navToRecommendBrandPage()">
-			<image src="/static/icon_home_brand.png"></image>
-			<view class="tit-box">
-				<text class="tit">品牌制造商直供</text>
-				<text class="tit2">工厂直达消费者，剔除品牌溢价</text>
-			</view>
-			<text class="yticon icon-you"></text>
-		</view>
+		<!-- 游戏列表 -->
+		<view class="game-section">
+			<view class="game-section-inner">
+				<view v-for="(item, index) in gameList" :key="index" class="game-item"
+					@click="navToGameDetailPage(item)">
 
-		<view class="guess-section">
-			<view v-for="(item, index) in brandList" :key="index" class="guess-item" @click="navToBrandDetailPage(item)">
-				<view class="image-wrapper-brand">
-					<image :src="item.logo" mode="aspectFit"></image>
-				</view>
-				<text class="title clamp">{{item.name}}</text>
-				<text class="title2">商品数量：{{item.productCount}}</text>
-			</view>
-		</view>
-
-		<!-- 秒杀专区 -->
-		<view class="f-header m-t" v-if="homeFlashPromotion!==null">
-			<image src="/static/icon_flash_promotion.png"></image>
-			<view class="tit-box">
-				<text class="tit">秒杀专区</text>
-				<text class="tit2">下一场 {{homeFlashPromotion.nextStartTime | formatTime}} 开始</text>
-			</view>
-			<view class="tit-box">
-				<text class="tit2" style="text-align: right;">本场结束剩余：</text>
-				<view style="text-align: right;">
-					<text class="hour timer">{{cutDownTime.endHour}}</text>
-					<text>:</text>
-					<text class="minute timer">{{cutDownTime.endMinute}}</text>
-					<text>:</text>
-					<text class="second timer">{{cutDownTime.endSecond}}</text>
+					<image :src="item.icon" class="game-logo" />
+					<text class="game-name">{{ item.name }}</text>
 				</view>
 			</view>
-			<text class="yticon icon-you" v-show="false"></text>
 		</view>
 
-		<view class="guess-section">
-			<view v-for="(item, index) in homeFlashPromotion.productList" :key="index" class="guess-item" @click="navToDetailPage(item)">
-				<view class="image-wrapper">
-					<image :src="item.pic" mode="aspectFill"></image>
-				</view>
-				<text class="title clamp">{{item.name}}</text>
-				<text class="title2 clamp">{{item.subTitle}}</text>
-				<text class="price">￥{{item.price}}</text>
+		<view class="announcement-section">
+			<view class="announcement-header">
+				<image src="/static/icons8-speaker-50.png" class="announcement-icon" />
+				<text class="announcement-title">交易公告</text>
 			</view>
-		</view>
-
-		<!-- 新鲜好物 -->
-		<view class="f-header m-t" @click="navToNewProudctListPage()">
-			<image src="/static/icon_new_product.png"></image>
-			<view class="tit-box">
-				<text class="tit">新鲜好物</text>
-				<text class="tit2">为你寻觅世间好物</text>
+			<view class="announcement-text">安全成交
+				<span class="highlight-text">812.5万</span>单，累计服务
+				<span class="highlight-text">108.2万</span>用户
 			</view>
-			<text class="yticon icon-you"></text>
-		</view>
-		<view class="seckill-section">
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view v-for="(item, index) in newProductList" :key="index" class="floor-item" @click="navToDetailPage(item)">
-						<image :src="item.pic" mode="aspectFill"></image>
-						<text class="title clamp">{{item.name}}</text>
-						<text class="title2 clamp">{{item.subTitle}}</text>
-						<text class="price">￥{{item.price}}</text>
+			<view class="announcement-content" ref="announcementContent">
+				<view v-for="(item, index) in visibleAnnouncements" :key="index" class="announcement-item">
+					<view class="announcement-text-container">
+						<view class="dot"></view>
+						<text
+							style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ item.text }}</text>
+						<text class="announcement-time"
+							style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ item.time }}</text>
 					</view>
 				</view>
-			</scroll-view>
-		</view>
-
-		<!-- 人气推荐楼层 -->
-		<view class="f-header m-t" @click="navToHotProudctListPage()">
-			<image src="/static/icon_hot_product.png"></image>
-			<view class="tit-box">
-				<text class="tit">人气推荐</text>
-				<text class="tit2">大家都赞不绝口的</text>
 			</view>
-			<text class="yticon icon-you"></text>
 		</view>
 
-		<view class="hot-section">
-			<view v-for="(item, index) in hotProductList" :key="index" class="guess-item" @click="navToDetailPage(item)">
-				<view class="image-wrapper">
-					<image :src="item.pic" mode="aspectFill"></image>
-				</view>
-				<view class="txt">
-					<text class="title clamp">{{item.name}}</text>
-					<text class="title2">{{item.subTitle}}</text>
-					<text class="price">￥{{item.price}}</text>
+		<!-- 底部广告 -->
+		<view class="bottom-section">
+			<view class="bottom-header">
+				<image src="/static/icons8-50.png" class="bottom-icon" />
+				<text class="bottom-title">特色服务</text>
+				<text class="bottom-title-desc">安全保障，极速发货，免费充值</text>
+			</view>
+			<view class="bottom-ad-container">
+				<view v-for="(item, index) in bottomAdList" :key="index" class="bottom-item"
+					@click="navToAdvertisePage(item)">
+					<image :src="item.pic" class="bottom-ad-icon" mode="aspectFit" />
 				</view>
 			</view>
 		</view>
 
-		<!-- 猜你喜欢-->
-		<view class="f-header m-t">
-			<image src="/static/icon_recommend_product.png"></image>
-			<view class="tit-box">
-				<text class="tit">猜你喜欢</text>
-				<text class="tit2">你喜欢的都在这里了</text>
-			</view>
-			<text class="yticon icon-you" v-show="false"></text>
-		</view>
-
-		<view class="guess-section">
-			<view v-for="(item, index) in recommendProductList" :key="index" class="guess-item" @click="navToDetailPage(item)">
-				<view class="image-wrapper">
-					<image :src="item.pic" mode="aspectFill"></image>
-				</view>
-				<text class="title clamp">{{item.name}}</text>
-				<text class="title2 clamp">{{item.subTitle}}</text>
-				<text class="price">￥{{item.price}}</text>
-			</view>
-		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
@@ -176,146 +90,109 @@
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		components: {
-			uniLoadMore	
+			uniLoadMore
 		},
 		data() {
 			return {
-				titleNViewBackground: '',
-				titleNViewBackgroundList: ['rgb(203, 87, 60)', 'rgb(205, 215, 218)'],
 				swiperCurrent: 0,
 				swiperLength: 0,
-				carouselList: [],
-				goodsList: [],
 				advertiseList: [],
-				brandList: [],
-				homeFlashPromotion: [],
-				newProductList: [],
-				hotProductList: [],
-				recommendProductList: [],
-				recommendParams: {
-					pageNum: 1,
-					pageSize: 4
-				},
-				loadingType:'more'
+				gameList: [],
+				bottomAdList: [],
+				announcements: [{
+						text: "用户20***673刚成交PUBG M 34.80元",
+						time: "28分钟前"
+					},
+					{
+						text: "用户12***439刚成交了代号弥 315元",
+						time: "15分钟前"
+					},
+					{
+						text: "用户14***559刚成交了黄火突击 64.8元",
+						time: "13分钟前"
+					},
+					{
+						text: "用户f***f刚成交PUBG M 34.80元",
+						time: "28分钟前"
+					},
+					{
+						text: "用户a***a刚成交了代号弥 315元",
+						time: "15分钟前"
+					},
+					{
+						text: "用户bb***b刚成交了黄火突击 64.8元",
+						time: "13分钟前"
+					},
+					{
+						text: "用户c***c刚成交PUBG M 34.80元",
+						time: "28分钟前"
+					},
+					{
+						text: "用户d***d刚成交了代号弥 315元",
+						time: "15分钟前"
+					},
+					{
+						text: "用户e***e刚成交了黄火突击 64.8元",
+						time: "13分钟前"
+					},
+				],
+				visibleAnnouncements: [],
+				currentIndex: 0,
+
 			};
 		},
 		onLoad() {
 			this.loadData();
 		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.recommendParams.pageNum=1;
-			this.loadData();
-		},
-		//加载更多
-		onReachBottom(){
-			this.recommendParams.pageNum++;
-			this.loadingType = 'loading';
-			fetchRecommendProductList(this.recommendParams).then(response => {
-				let addProductList = response.data;
-				if(response.data.length===0){
-					//没有更多了
-					this.recommendParams.pageNum--;
-					this.loadingType = 'nomore';
-				}else{
-					this.recommendProductList = this.recommendProductList.concat(addProductList);
-					this.loadingType = 'more';
-				}
-			})
-		},
-		computed: {
-			cutDownTime() {
-				let endTime = new Date(this.homeFlashPromotion.endTime);
-				let endDateTime = new Date();
-				let startDateTime = new Date();
-				endDateTime.setHours(endTime.getHours());
-				endDateTime.setMinutes(endTime.getMinutes());
-				endDateTime.setSeconds(endTime.getSeconds());
-				let offsetTime = (endDateTime.getTime() - startDateTime.getTime());
-				let endHour = Math.floor(offsetTime / (60 * 60 * 1000));
-				let offsetMinute = offsetTime % (60 * 60 * 1000);
-				let endMinute = Math.floor(offsetMinute / (60 * 1000));
-				let offsetSecond = offsetTime % (60 * 1000);
-				let endSecond = Math.floor(offsetSecond / 1000);
-				return {
-					endHour: endHour,
-					endMinute: endMinute,
-					endSecond: endSecond
-				}
-			}
-		},
-		filters: {
-			formatTime(time) {
-				if (time == null || time === '') {
-					return 'N/A';
-				}
-				let date = new Date(time);
-				return formatDate(date, 'hh:mm:ss')
-			},
+		mounted() {
+			this.visibleAnnouncements = this.announcements.slice(0, 3); // 初始显示前三个公告
+			setInterval(this.scrollAnnouncements, 3000); // 每3秒滚动一次
 		},
 		methods: {
+			//轮播图切换修改背景色
+			swiperChange(e) {
+				const index = e.detail.current;
+				this.swiperCurrent = index;
+			},
 			/**
 			 * 加载数据
 			 */
 			async loadData() {
 				fetchContent().then(response => {
 					console.log("onLoad", response.data);
-					this.advertiseList = response.data.advertiseList;
+					this.advertiseList = response.data.advertiseList.filter(ad => ad.type === 1);
+					this.bottomAdList = response.data.advertiseList.filter(ad => ad.type === 0).slice(0, 3);
 					this.swiperLength = this.advertiseList.length;
-					this.titleNViewBackground = this.titleNViewBackgroundList[0];
-					this.brandList = response.data.brandList;
-					this.homeFlashPromotion = response.data.homeFlashPromotion;
-					this.newProductList = response.data.newProductList;
-					this.hotProductList = response.data.hotProductList;
-					fetchRecommendProductList(this.recommendParams).then(response => {
-						this.recommendProductList = response.data;
-						uni.stopPullDownRefresh();
+					this.gameList = response.data.gameList.slice(0, 9);
+					this.gameList.push({
+						"id": 0,
+						"icon": "/static/tab-cate-current.png",
+						"name": "更多游戏"
 					})
 				});
 			},
-			//轮播图切换修改背景色
-			swiperChange(e) {
-				const index = e.detail.current;
-				this.swiperCurrent = index;
-				let changeIndex = index % this.titleNViewBackgroundList.length;
-				this.titleNViewBackground = this.titleNViewBackgroundList[changeIndex];
+
+			navToGameDetailPage(game) {
+				console.log('navToGame', game)
 			},
-			//商品详情页
-			navToDetailPage(item) {
-				let id = item.id;
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
-			},
+
 			//广告详情页
 			navToAdvertisePage(item) {
-				let id = item.id;
-				console.log("navToAdvertisePage",item)
-			},
-			//品牌详情页
-			navToBrandDetailPage(item) {
-				let id = item.id;
+				let url = item.url;
 				uni.navigateTo({
-					url: `/pages/brand/brandDetail?id=${id}`
+					url: `/pages/advertise/index?url=${url}`
 				})
+				console.log("navToAdvertisePage", item)
 			},
-			//推荐品牌列表页
-			navToRecommendBrandPage() {
-				uni.navigateTo({
-					url: `/pages/brand/list`
-				})
-			},
-			//新鲜好物列表页
-			navToNewProudctListPage() {
-				uni.navigateTo({
-					url: `/pages/product/newProductList`
-				})
-			},
-			//人气推荐列表页
-			navToHotProudctListPage() {
-				uni.navigateTo({
-					url: `/pages/product/hotProductList`
-				})
+
+			scrollAnnouncements() {
+				this.currentIndex = (this.currentIndex + 1) % this.announcements.length;
+				const startIndex = this.currentIndex;
+				this.visibleAnnouncements = [
+					this.announcements[startIndex],
+					this.announcements[(startIndex + 1) % this.announcements.length],
+					this.announcements[(startIndex + 2) % this.announcements.length],
+				];
 			},
 		},
 		// #ifndef MP
@@ -400,6 +277,18 @@
 	/* #endif */
 
 
+	.container {
+		background-color: rgb(235, 243, 250);
+		/* 为整个容器添加背景图 */
+		background-image: url('../../static/bg.png');
+		background-size: cover;
+		/* 背景图片覆盖整个容器 */
+		background-position: center;
+		background-repeat: no-repeat;
+		height: 800px;
+		/* 确保背景图能覆盖整个视口高度 */
+	}
+
 	page {
 		background: #f5f5f5;
 	}
@@ -431,7 +320,7 @@
 
 	.carousel {
 		width: 100%;
-		height: 350upx;
+		height: 250upx;
 
 		.carousel-item {
 			width: 100%;
@@ -478,371 +367,215 @@
 		}
 	}
 
-	/* 分类 */
-	.cate-section {
+	.game-section {
 		display: flex;
-		justify-content: space-around;
+		justify-content: center;
 		align-items: center;
-		flex-wrap: wrap;
-		padding: 30upx 22upx;
-		background: #fff;
-
-		.cate-item {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			font-size: $font-sm + 2upx;
-			color: $font-color-dark;
-		}
-
-		/* 原图标颜色太深,不想改图了,所以加了透明度 */
-		image {
-			width: 88upx;
-			height: 88upx;
-			margin-bottom: 14upx;
-			border-radius: 50%;
-			opacity: .7;
-			box-shadow: 4upx 4upx 20upx rgba(250, 67, 106, 0.3);
-		}
+		widows: 100%;
 	}
 
-	.ad-1 {
+	.game-section-inner {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		/* 每行5个 */
+		// grid-gap: 14px;
+		padding: 10px;
 		width: 100%;
-		height: 210upx;
-		padding: 10upx 0;
-		background: #fff;
-
-		image {
-			width: 100%;
-			height: 100%;
-		}
 	}
 
-	/* 秒杀专区 */
-	.seckill-section {
-		padding: 4upx 30upx 24upx;
-		background: #fff;
-
-		.s-header {
-			display: flex;
-			align-items: center;
-			height: 92upx;
-			line-height: 1;
-
-			.s-img {
-				width: 140upx;
-				height: 30upx;
-			}
-
-			.tip {
-				font-size: $font-base;
-				color: $font-color-light;
-				margin: 0 20upx 0 40upx;
-			}
-
-			.timer {
-				display: inline-block;
-				width: 40upx;
-				height: 36upx;
-				text-align: center;
-				line-height: 36upx;
-				margin-right: 14upx;
-				font-size: $font-sm+2upx;
-				color: #fff;
-				border-radius: 2px;
-				background: rgba(0, 0, 0, .8);
-			}
-
-			.icon-you {
-				font-size: $font-lg;
-				color: $font-color-light;
-				flex: 1;
-				text-align: right;
-			}
-		}
-
-		.floor-list {
-			white-space: nowrap;
-		}
-
-		.scoll-wrapper {
-			display: flex;
-			align-items: flex-start;
-		}
-
-		.floor-item {
-			width: 300upx;
-			margin-right: 20upx;
-			font-size: $font-sm+2upx;
-			color: $font-color-dark;
-			line-height: 1.8;
-
-			image {
-				width: 300upx;
-				height: 300upx;
-				border-radius: 6upx;
-			}
-
-			.price {
-				color: $uni-color-primary;
-			}
-		}
-
-		.title2 {
-			font-size: $font-sm;
-			color: $font-color-light;
-			line-height: 40upx;
-		}
-	}
-
-	.f-header {
+	.game-item {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
-		height: 140upx;
-		padding: 6upx 30upx 8upx;
-		background: #fff;
-
-		image {
-			flex-shrink: 0;
-			width: 80upx;
-			height: 80upx;
-			margin-right: 20upx;
-		}
-
-		.tit-box {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-		}
-
-		.tit {
-			font-size: $font-lg +2upx;
-			color: #font-color-dark;
-			line-height: 1.3;
-		}
-
-		.tit2 {
-			font-size: $font-sm;
-			color: $font-color-light;
-		}
-
-		.icon-you {
-			font-size: $font-lg +2upx;
-			color: $font-color-light;
-		}
-
-		.timer {
-			display: inline-block;
-			width: 40upx;
-			height: 36upx;
-			text-align: center;
-			line-height: 36upx;
-			margin-right: 14upx;
-			font-size: $font-sm+2upx;
-			color: #fff;
-			border-radius: 2px;
-			background: rgba(0, 0, 0, .8);
-		}
+		justify-content: center;
+		text-align: center;
+		width: 100%;
 	}
 
-	/* 分类推荐楼层 */
-	.hot-floor {
-		width: 100%;
+	.game-logo {
+		width: 52px;
+		height: 52px;
+		border-radius: 10px;
+		/* 添加圆角 */
+	}
+
+	.game-name {
+		margin-top: 4px;
+		margin-bottom: 8px;
+		font-size: 12px;
+		white-space: nowrap;
+		/* 禁止换行 */
 		overflow: hidden;
-		margin-bottom: 20upx;
+		text-overflow: ellipsis;
+		/* 文字过长时用省略号代替 */
+		width: 50px;
+		/* 与item宽度相匹配 */
+	}
 
-		.floor-img-box {
-			width: 100%;
-			height: 320upx;
-			position: relative;
+	.announcement-icon {
+		width: 20px;
+		height: 20px;
+		margin-right: 10px;
+	}
 
-			&:after {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(rgba(255, 255, 255, .06) 30%, #f8f8f8);
-			}
+	.announcement-section {
+		background: linear-gradient(180deg, #fff0da, #ffffff 40%);
+		/* 渐变背景色 */
+		border-radius: 10px;
+		padding: 16px;
+		margin: 0px 20upx;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		border: 1px solid #f5f5f5;
+		/* 正确的颜色代码和边框样式 */
+		height: 210px;
+	}
+
+	.announcement-header {
+		display: flex;
+		align-items: center;
+	}
+
+	.announcement-title {
+		font-weight: bold;
+		font-size: 18px;
+		color: #262728;
+	}
+
+	.announcement-text {
+		white-space: nowrap;
+		/* 禁止换行 */
+		margin: 18px 0;
+		/* 上下margin 20px */
+		font-size: 16px;
+		/* 默认字体大小 */
+		line-height: 1.5;
+	}
+
+	.highlight-text {
+		font-size: 20px;
+		font-weight: 800;
+	}
+
+	.announcement-content {
+		overflow: hidden;
+		height: 80px;
+		/* 3个公告项的高度，每个公告项40px */
+		width: 100%;
+		/* 确保占满宽度 */
+	}
+
+
+	.announcement-item {
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 10px;
+		height: 20px;
+		/* 每个公告项的高度 */
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		/* 确保子项左对齐 */
+		width: 100%;
+		/* 确保占满宽度 */
+	}
+
+	.announcement-text-container {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		/* 确保子项左对齐 */
+		width: 100%;
+	}
+
+	.dot {
+		width: 6px;
+		height: 6px;
+		background-color: #f5b342;
+		/* 黄色 */
+		border-radius: 50%;
+		margin-right: 8px;
+	}
+
+	.announcement-time {
+		font-size: 12px;
+		color: #999;
+		/* 较浅的颜色 */
+		margin-left: auto;
+		/* 将时间推到右侧 */
+	}
+
+	@keyframes scrollUp {
+		from {
+			transform: translateY(100%);
 		}
 
-		.floor-img {
-			width: 100%;
-			height: 100%;
-		}
-
-		.floor-list {
-			white-space: nowrap;
-			padding: 20upx;
-			padding-right: 50upx;
-			border-radius: 6upx;
-			margin-top: -140upx;
-			margin-left: 30upx;
-			background: #fff;
-			box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
-			position: relative;
-			z-index: 1;
-		}
-
-		.scoll-wrapper {
-			display: flex;
-			align-items: flex-start;
-		}
-
-		.floor-item {
-			width: 180upx;
-			margin-right: 20upx;
-			font-size: $font-sm+2upx;
-			color: $font-color-dark;
-			line-height: 1.8;
-
-			image {
-				width: 180upx;
-				height: 180upx;
-				border-radius: 6upx;
-			}
-
-			.price {
-				color: $uni-color-primary;
-			}
-		}
-
-		.more {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			flex-shrink: 0;
-			width: 180upx;
-			height: 180upx;
-			border-radius: 6upx;
-			background: #f3f3f3;
-			font-size: $font-base;
-			color: $font-color-light;
-
-			text:first-child {
-				margin-bottom: 4upx;
-			}
+		to {
+			transform: translateY(0);
 		}
 	}
 
-	/* 猜你喜欢 */
-	.guess-section {
-		display: flex;
-		flex-wrap: wrap;
-		padding: 0 30upx;
-		background: #fff;
 
-		.guess-item {
-			display: flex;
-			flex-direction: column;
-			width: 48%;
-			padding-bottom: 40upx;
-
-			&:nth-child(2n+1) {
-				margin-right: 4%;
-			}
-		}
-
-		.image-wrapper {
-			width: 100%;
-			height: 330upx;
-			border-radius: 3px;
-			overflow: hidden;
-
-			image {
-				width: 100%;
-				height: 100%;
-				opacity: 1;
-			}
-		}
-		
-		.image-wrapper-brand {
-			width: 100%;
-			height: 150upx;
-			border-radius: 3px;
-			overflow: hidden;
-		
-			image {
-				width: 100%;
-				height: 100%;
-				opacity: 1;
-			}
-		}
-
-		.title {
-			font-size: $font-lg;
-			color: $font-color-dark;
-			line-height: 80upx;
-		}
-
-		.title2 {
-			font-size: $font-sm;
-			color: $font-color-light;
-			line-height: 40upx;
-		}
-
-		.price {
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 1;
-		}
+	.bottom-icon {
+		width: 20px;
+		height: 20px;
+		margin-right: 10px;
 	}
 
-	.hot-section {
+	.bottom-section {
+		background: linear-gradient(180deg, #ddf0ff, #ffffff 40%);
+		/* 渐变背景色 */
+		border-radius: 10px;
+		padding: 16px;
+		margin: 12px 20upx;
 		display: flex;
-		flex-wrap: wrap;
-		padding: 0 30upx;
-		background: #fff;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		border: 1px solid #f5f5f5;
+		/* 正确的颜色代码和边框样式 */
+		height: 190px;
+	}
 
-		.guess-item {
-			display: flex;
-			flex-direction: row;
-			width: 100%;
-			padding-bottom: 40upx;
-		}
+	.bottom-header {
+		display: flex;
+		align-items: center;
+	}
 
-		.image-wrapper {
-			width: 30%;
-			height: 250upx;
-			border-radius: 3px;
-			overflow: hidden;
+	.bottom-title {
+		font-weight: bold;
+		font-size: 18px;
+		color: #262728;
+	}
 
-			image {
-				width: 100%;
-				height: 100%;
-				opacity: 1;
-			}
-		}
+	.bottom-title-desc {
+		font-size: 12px;
+		color: #8c8c8c;
+		margin-left: 12px;
+	}
 
-		.title {
-			font-size: $font-lg;
-			color: $font-color-dark;
-			line-height: 80upx;
-		}
+	.bottom-ad-container {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+		align-items: center;
+		text-align: center;
+		padding: 0px 0;
+		width: 100%;
+	}
 
-		.title2 {
-			font-size: $font-sm;
-			color: $font-color-light;
-			line-height: 40upx;
-			height: 80upx;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: block;
-		}
+	.bottom-item {
+		border-radius: 10px;
+		width: 30%;
+		/* 三列布局，宽度设为30% */
+	}
 
-		.price {
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 80upx;
-		}
+	.bottom-ad-icon {
+		margin-top: 12px;
+		width: 100%;
+		height: 120px;
 
-		.txt {
-			width: 70%;
-			display: flex;
-			flex-direction: column;
-			padding-left: 40upx;
-		}
 	}
 </style>

@@ -5,37 +5,35 @@
 			"path": "pages/index/index",
 			"style": {
 				// #ifdef MP 
-				"navigationBarTitleText": "Mall商城",
+				"navigationBarTitleText": "导航栏标题",
 				//"navigationStyle": "custom",
 				// #endif 
 				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
+						"titleSize": "0px",
 						"type": "transparent",
-						"searchInput": {
-							"backgroundColor": "rgba(231, 231, 231,.7)",
-							"borderRadius": "16px",
-							"placeholder": "请输入商品 如：手机",
-							"disabled": true,
-							"placeholderColor": "#606266"
-						},
-						"buttons": [{
-								"fontSrc": "/static/yticon.ttf",
-								"text": "\ue60d",
-								"fontSize": "26",
-								"color": "#303133",
-								"float": "left",
-								"background": "rgba(0,0,0,0)"
-							},
-							{
-								"fontSrc": "/static/yticon.ttf",
-								"text": "\ue744",
-								"fontSize": "27",
-								"color": "#303133",
-								"background": "rgba(0,0,0,0)",
-								"redDot": true
+						"tags": [{
+								"id": "abc",
+								"tag": "img",
+								"src": "/static/logo.png",
+								"position": {
+									"left": "0px",
+									"top": "0px",
+									"width": "110px",
+									"height": "26px"
+								}
 							}
-						]
+
+						],
+						"buttons": [{
+							"fontSrc": "/static/yticon.ttf",
+							"text": "\ue744",
+							"fontSize": "27",
+							"color": "#303133",
+							"background": "rgba(0,0,0,0)",
+							"redDot": false
+						}]
 					}
 				}
 			}
@@ -226,7 +224,7 @@
 					}
 				}
 			}
-		},{
+		}, {
 			"path": "pages/user/productCollection",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -243,7 +241,7 @@
 					}
 				}
 			}
-		},{
+		}, {
 			"path": "pages/user/brandAttention",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -260,13 +258,25 @@
 					}
 				}
 			}
+		},
+		{
+			"path": "pages/advertise/index",
+			"style": {
+				"navigationBarTitleText": "公告详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "mall-app-web",
+		"navigationBarTitleText": "即刻充值",
 		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#f8f8f8"
+		"backgroundColor": "#f8f8f8",
+		"maxWidth": 430
 	},
 	"tabBar": {
 		"color": "#C0C4CC",
@@ -285,12 +295,7 @@
 				"selectedIconPath": "static/tab-cate-current.png",
 				"text": "分类"
 			},
-			{
-				"pagePath": "pages/cart/cart",
-				"iconPath": "static/tab-cart.png",
-				"selectedIconPath": "static/tab-cart-current.png",
-				"text": "购物车"
-			},
+
 			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/tab-my.png",
