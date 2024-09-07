@@ -1,5 +1,21 @@
 <template>
 	<view class="content">
+		<view class="navbar" :style="{position:headerPosition,top:headerTop}">
+			<view class="nav-item" :class="{current: filterIndex === 0}" @click="tabClick(0)">
+				综合排序
+			</view>
+			<view class="nav-item" :class="{current: filterIndex === 1}" @click="tabClick(1)">
+				销量优先
+			</view>
+			<view class="nav-item" :class="{current: filterIndex === 2}" @click="tabClick(2)">
+				<text>价格</text>
+				<view class="p-box">
+					<text :class="{active: priceOrder === 1 && filterIndex === 2}" class="yticon icon-shang"></text>
+					<text :class="{active: priceOrder === 2 && filterIndex === 2}" class="yticon icon-shang xia"></text>
+				</view>
+			</view>
+			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
+		</view>
 		<view class="goods-list">
 			<view v-for="(item, index) in productList" :key="index" class="goods-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
@@ -13,12 +29,29 @@
 				</view>
 			</view>
 		</view>
+		<uni-load-more :status="loadingType"></uni-load-more>
+
+		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
+			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
+				<scroll-view scroll-y class="cate-list">
+					<view v-for="item in cateList" :key="item.id">
+						<view class="cate-item b-b two">{{item.name}}</view>
+						<view v-for="tItem in item.children" :key="tItem.id" class="cate-item b-b" :class="{active: tItem.id==searchParam.productCategoryId}"
+						 @click="changeCate(tItem)">
+							{{tItem.name}}
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</view>
+
 	</view>
 </template>
 
 <script>
 	import {
-		searchProductList
+		searchProductList,
+		fetchCategoryTreeList
 	} from '@/api/product.js';
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
@@ -37,23 +70,20 @@
 				productList: [],
 				searchParam: {
 					productCategoryId: null,
+					pageNum: 1,
+					pageSize: 6,
+					sort: 0
 				}
 			};
 		},
 
-		onShow() {
-			console.log('onLoad')
-			uni.getStorage({
-				key: 'productSelect',
-				success: (res) => {
-					
-					let productSelect = res.data;
-					console.log("getstorage success",productSelect)
-					this.searchParam.productCategoryId = productSelect.sid;
-					this.loadData();
-				}
-			});
-
+		onLoad(options) {
+			// #ifdef H5
+			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight + 'px';
+			// #endif
+			this.searchParam.productCategoryId = options.sid;
+			this.loadCateList(options.fid, options.sid);
+			this.loadData();
 		},
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
@@ -63,14 +93,74 @@
 				this.headerPosition = "absolute";
 			}
 		},
+		//下拉刷新
+		onPullDownRefresh() {
+			this.loadData('refresh');
+		},
+		//加载更多
+		onReachBottom() {
+			this.searchParam.pageNum++;
+			this.loadData();
+		},
 		methods: {
+			//加载分类
+			async loadCateList(fid, sid) {
+				fetchCategoryTreeList().then(response => {
+					this.cateList = response.data;
+				})
+			},
 			//加载商品 ，带下拉刷新和上滑加载
-			async loadData() {
-				this.searchParam.pageNum = 1;
-				this.productList = [];
-				
-				
-				
+			async loadData(type = 'add', loading) {
+				//没有更多直接返回
+				if (type === 'add') {
+					if (this.loadingType === 'nomore') {
+						return;
+					}
+					this.loadingType = 'loading';
+				} else {
+					this.loadingType = 'more'
+				}
+
+				if (type === 'refresh') {
+					this.searchParam.pageNum=1;
+					this.productList = [];
+				}
+				if(this.filterIndex==0){
+					this.searchParam.sort=0;
+				}
+				if (this.filterIndex === 1) {
+					this.searchParam.sort = 2;
+				}
+				if (this.filterIndex === 2) {
+					if (this.priceOrder == 1) {
+						this.searchParam.sort = 3;
+					} else {
+						this.searchParam.sort = 4;
+					}
+				}
+				searchProductList(this.searchParam).then(response => {
+					let productList = response.data.list;
+					if (response.data.list.length === 0) {
+						//没有更多了
+						this.loadingType = 'nomore';
+						this.searchParam.pageNum--;
+					} else {
+						if (response.data.list.length < this.searchParam.pageSize) {
+							this.loadingType = 'nomore';
+							this.searchParam.pageNum--;
+						} else {
+							this.loadingType = 'more';
+						}
+						this.productList = this.productList.concat(productList);
+					}
+					if (type === 'refresh') {
+						if (loading == 1) {
+							uni.hideLoading()
+						} else {
+							uni.stopPullDownRefresh();
+						}
+					}
+				});
 			},
 			//筛选点击
 			tabClick(index) {
@@ -101,7 +191,19 @@
 					this.cateMaskState = state;
 				}, timer)
 			},
-
+			//分类点击
+			changeCate(item) {
+				this.searchParam.productCategoryId = item.id;
+				this.toggleCateMask();
+				uni.pageScrollTo({
+					duration: 300,
+					scrollTop: 0
+				})
+				this.loadData('refresh', 1);
+				uni.showLoading({
+					title: '正在加载'
+				})
+			},
 			//详情
 			navToDetailPage(item) {
 				let id = item.id;
@@ -120,6 +222,9 @@
 		background: $page-color-base;
 	}
 
+	.content {
+		padding-top: 96upx;
+	}
 
 	.navbar {
 		position: fixed;

@@ -8,6 +8,13 @@ export function searchProductList(params) {
 	})
 }
 
+export function fetchProductDetailByCategory(categoryId){
+	return request({
+		method: 'GET',
+		url: '/product/detailByCategory/'+categoryId
+	})
+}
+
 export function fetchCategoryTreeList() {
 	return request({
 		method: 'GET',

@@ -173,7 +173,20 @@
 			},
 
 			navToGameDetailPage(game) {
-				console.log('navToGame', game)
+				uni.setStorage({
+				  key: 'productSelect',
+				  data: {
+					  "fid":game.parentId,
+					  "sid":game.id,
+					  'gameName':game.name,
+					  'gamePic':game.icon
+				  },
+				  success: () => {
+				    uni.switchTab({
+				      url: '/pages/product/game_product'
+				    });
+				  }
+				});
 			},
 
 			//广告详情页
@@ -182,7 +195,6 @@
 				uni.navigateTo({
 					url: `/pages/advertise/index?url=${url}`
 				})
-				console.log("navToAdvertisePage", item)
 			},
 
 			scrollAnnouncements() {
@@ -280,7 +292,7 @@
 	.container {
 		background-color: rgb(235, 243, 250);
 		/* 为整个容器添加背景图 */
-		background-image: url('../../static/bg.png');
+		background-image: url('/static/bg.png');
 		background-size: cover;
 		/* 背景图片覆盖整个容器 */
 		background-position: center;

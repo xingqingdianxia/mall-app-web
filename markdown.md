@@ -13,6 +13,10 @@ http://malldev.huhp.cc/api/mall-admin/productAttribute/category/list?pageNum=1&p
 入口方法：com.macro.mall.controller.PmsProductAttributeCategoryController#getList
 table:pms_product_attribute_category
 
+pms_sku_stock
+pms_product
+
+
 根据规格id查规格具体的属性，属性应该是充值方式，区服，礼包那些
 http://malldev.huhp.cc/api/mall-admin/productAttribute/list/2?pageNum=1&pageSize=100&type=0
 入口方法：com.macro.mall.controller.PmsProductAttributeController#getList
