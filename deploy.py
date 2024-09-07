@@ -18,7 +18,7 @@ def main():
     run_command("cli publish --platform h5 --project mall-app-web")
 
     # 远程删除文件夹下的内容，如果文件夹存在
-    ssh_rm_command = "ssh root@192.168.1.34 \"test -d /root/env_dev/nginx/html/mall && rm -fr /root/env_dev/nginx/html/mall\""
+    ssh_rm_command = "ssh root@192.168.1.34 \"rm -fr /root/env_dev/nginx/html/mall\""
     run_command(ssh_rm_command)
 
     # 使用 SCP 上传文件

@@ -75,7 +75,7 @@
 				</view>
 			</view>
 		</view>
-
+		<view style="height: 20px;"></view>
 	</view>
 </template>
 
@@ -174,18 +174,18 @@
 
 			navToGameDetailPage(game) {
 				uni.setStorage({
-				  key: 'productSelect',
-				  data: {
-					  "fid":game.parentId,
-					  "sid":game.id,
-					  'gameName':game.name,
-					  'gamePic':game.icon
-				  },
-				  success: () => {
-				    uni.switchTab({
-				      url: '/pages/product/game_product'
-				    });
-				  }
+					key: 'productSelect',
+					data: {
+						"fid": game.parentId,
+						"sid": game.id,
+						'gameName': game.name,
+						'gamePic': game.icon
+					},
+					success: () => {
+						uni.switchTab({
+							url: '/pages/product/game_product'
+						});
+					}
 				});
 			},
 
@@ -295,9 +295,8 @@
 		background-image: url('/static/bg.png');
 		background-size: cover;
 		/* 背景图片覆盖整个容器 */
-		background-position: center;
+		background-position: top center;
 		background-repeat: no-repeat;
-		height: 800px;
 		/* 确保背景图能覆盖整个视口高度 */
 	}
 
@@ -548,7 +547,7 @@
 		justify-content: flex-start;
 		border: 1px solid #f5f5f5;
 		/* 正确的颜色代码和边框样式 */
-		height: 190px;
+		// height: 190px;
 	}
 
 	.bottom-header {

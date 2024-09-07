@@ -61,7 +61,10 @@
 					</view>
 				</view>
 			</view>
-			<button class="buy-button">立即购买</button>
+			<view class="buy-button-back">
+				<view class="buy-button" @click="navToDetailPage">立即购买</view>
+			</view>
+			
 		</view>
 	</view>
 
@@ -140,6 +143,15 @@
 			});
 		},
 		methods: {
+			//详情
+			navToDetailPage() {
+				if(this.selectedSku) {
+					uni.navigateTo({
+						url: `/pages/product/confirmProduct?id=${this.selectedSku.productId}&gameName=${this.selectedSku.gameName}&gamePic=${this.selectedSku.gamePic}&productPic=${this.selectedSku.pic}&productName=${this.selectedSku.name}&spData=${JSON.stringify(this.selectedSku.spData)}&promotPrice=${this.selectedSku.promotPrice}&price=${this.selectedSku.price}&productBrand=${this.selectedSku.productBrand}&productCategoryId=${this.selectedSku.productCategoryId}&productSubTitle=${this.selectedSku.productSubTitle}`
+					})
+				}
+				
+			},
 			selectPorduct(item) {
 				this.selectedSku = item
 			},
@@ -203,7 +215,13 @@
 												'skuId': skuStock.id,
 												'pic': item.product.pic,
 												'name': item.product.name,
-												'promotPrice':skuStock.promotionPrice
+												'promotPrice':skuStock.promotionPrice,
+												'gameName': this.gameName,
+												'gamePic': this.gamePic,
+												'spData':spData,
+												'productBrand':item.brand.name,
+												'productCategoryId':this.productCategoryId,
+												'productSubTitle':item.product.subTitle
 												
 											})
 										}
@@ -385,16 +403,21 @@
 	}
 
 	/* 立即购买按钮 */
-	.buy-button {
+	.buy-button-back {
 		background: linear-gradient(90deg, #0599f3, #16bbfd);
-		color: white;
-		font-size: 18px;
-		padding: 6px 10px;
 		height: 100%;
 		width: 120px;
 		position: absolute;
 		right: 0;
 		border-radius: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;    /* 垂直方向居中 */
+	}
+	.buy-button {
+		color: white;
+		font-size: 18px;
 
 	}
 

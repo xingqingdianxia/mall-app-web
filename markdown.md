@@ -25,3 +25,9 @@ table:pms_product_attribute
 
 广告列表就是轮播图
 商品分类的页面下“是否显示”选项决定了分类是否展示它
+
+一进入页面就/cart/clear,/cart/add,cart/list拿到cart的id，之后任何操作都是quantity?id=cartId&quantity=n
+
+
+add的内容是
+{"price":200,"productAttr":"[{\"key\":\"充值方式\",\"value\":\"代充\"},{\"key\":\"区服\",\"value\":\"国际服\"},{\"key\":\"产品类型\",\"value\":\"月卡\"}]","productBrand":"暂不可用","productCategoryId":61,"productId":47,"productName":"王者荣耀200元点卡","productPic":"http://huhp-mall-dev.oss-cn-guangzhou.aliyuncs.com/mall-dev/images/20240906/abstract.png","productSkuCode":"202409060047011","productSkuId":285,"productSn":"","productSubTitle":"王者荣耀的200元点卡","quantity":1}
