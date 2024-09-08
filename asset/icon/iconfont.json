@@ -1,0 +1,100 @@
+{
+  "id": "4677903",
+  "name": "shop",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1304879",
+      "name": "帮助",
+      "font_class": "bangzhu",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "5387514",
+      "name": "帮助",
+      "font_class": "bangzhu1",
+      "unicode": "eaef",
+      "unicode_decimal": 60143
+    },
+    {
+      "icon_id": "4398325",
+      "name": "左",
+      "font_class": "zuo",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "14583489",
+      "name": "shang",
+      "font_class": "shang",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "14584730",
+      "name": "xia",
+      "font_class": "xia",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "287167",
+      "name": "右箭头",
+      "font_class": "youjiantou",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "1183030",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "12292182",
+      "name": "购物车",
+      "font_class": "gouwuche",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "5030",
+      "name": "购物车满",
+      "font_class": "gouwucheman",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "2076258",
+      "name": "客服",
+      "font_class": "kefu",
+      "unicode": "e88f",
+      "unicode_decimal": 59535
+    },
+    {
+      "icon_id": "5387384",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "eac1",
+      "unicode_decimal": 60097
+    },
+    {
+      "icon_id": "9945087",
+      "name": "优惠券",
+      "font_class": "youhuiquan",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "18267950",
+      "name": "身份认证",
+      "font_class": "shenfenrenzheng",
+      "unicode": "e996",
+      "unicode_decimal": 59798
+    }
+  ]
+}

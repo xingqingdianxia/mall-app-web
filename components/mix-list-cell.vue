@@ -4,15 +4,19 @@
 		<view class="mix-list-cell" :class="border" @click="eventClick" hover-class="cell-hover"  :hover-stay-time="50">
 			<text
 				v-if="icon"
-				class="cell-icon yticon"
+				class="cell-icon"
 				:style="[{
 					color: iconColor,
 				}]"
 				:class="icon"
 			></text>
 			<text class="cell-tit clamp">{{title}}</text>
-			<text v-if="tips" class="cell-tip">{{tips}}</text>
-			<text class="cell-more yticon"
+			<text
+				v-if="tips"
+				class="cell-tip"
+				:class="tipsColor"
+			>{{tips}}</text>
+			<text class="iconfont"
 				:class="typeList[navigateType]"
 			></text>
 		</view>
@@ -30,7 +34,7 @@
 			return {
 				typeList: {
 					left: 'icon-zuo',
-					right: 'icon-you',
+					right: 'icon-youjiantou',
 					up: 'icon-shang',
 					down: 'icon-xia'
 				},
@@ -46,6 +50,10 @@
 				default: '标题'
 			},
 			tips: {
+				type: String,
+				default: ''
+			},
+			tipsColor: {
 				type: String,
 				default: ''
 			},
@@ -114,6 +122,9 @@
 		.cell-tip{
 			font-size: $font-sm+2upx;
 			color: $font-color-light;
+		}
+		.cell-tip-blue{
+			color: $font-color-spec;
 		}
 	}
 </style>

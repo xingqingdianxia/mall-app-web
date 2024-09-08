@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import store from './store'
 import App from './App'
+// 阿里图标库
+import './asset/icon/iconfont.css'
+import './asset/icon/iconfont.js'
 
 const msg = (title, duration=1500, mask=false, icon='none')=>{
 	//统一提示方便全局修改
