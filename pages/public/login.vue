@@ -12,15 +12,19 @@
 				<view class="input-item">
 					<input type="text" v-model="username" placeholder="请输入手机号" maxlength="11"/>
 				</view>
-				<view class="input-item">
-					<input type="text" v-model="password" placeholder="请输入验证码" placeholder-class="input-empty" maxlength="20"
+				<view class="input-item password">
+					<input type="text" v-model="password" placeholder="请输入验证码" placeholder-class="input-empty" maxlength="10" @input="clearInput"
 					 password @confirm="toLogin" />
+					 <view class="auth-code" @click="getAuthCode">
+						 <view v-if="!authCodeDisabled" class="get-code" @click="getAuthCode">发送验证码</view>
+						 <view v-else class="disable-code" @click="getAuthCode">重新获取({{second}})</view>
+					 </view>
 				</view>
 			</view>
 			<button type="primary" class="confirm-btn" @click="toLogin" :disabled="logining">立即登录</button>
 		</view>
 		<view class="register-section">
-			<radio :value="radio" :checked="radio" class="radio" />
+			<radio value="radio" class="radio" />
 			登录即表示同意
 			<text @click="toRegist">《儿童个人信息保护指引》</text>
 			<text @click="toRegist">《用户协议》</text>
@@ -42,6 +46,8 @@
 			return {
 				username: '',
 				password: '',
+				second: 60,
+				authCodeDisabled: false,
 				logining: true,
 				radio: false
 			}
@@ -57,6 +63,17 @@
 			},
 			toRegist() {
 				uni.navigateTo({url:'/pages/public/register'});
+			},
+			getAuthCode() {
+				this.authCodeDisabled = true;
+				var timer = setInterval(() => {
+					this.second--;
+					console.log(this.second);
+					if (this.second == 0) {
+						console.log(111);
+						clearInterval(timer);		
+					}
+				}, 1000);
 			},
 			async toLogin() {
 				this.logining = true;
@@ -114,14 +131,69 @@
 					font-size: $font-base;
 				}
 			}
+			.input-content {
+				padding: 0 60upx;
+				.input-item {
+					display: flex;
+					/* flex-direction: column; */
+					/* align-items: flex-start; */
+					justify-content: center;
+					padding: 0 30upx;
+					height: 100upx;
+					line-height: 100upx;
+					margin-bottom: 15upx;
+					border-bottom: 1px solid #d1dfeb;
+				
+					&:last-child {
+						margin-bottom: 0;
+					}
+					input {
+						height: 100%;
+						font-size: $font-base + 2upx;
+						color: $font-color-dark;
+						width: 100%;
+					}
+					.auth-code {
+						width: 220upx;
+						font-size: $font-base;
+						.get-code {
+							color: #1fa3f3;
+						}
+						.disable-code {
+							color: #8c8c8c;
+						}
+					}
+					
+				}
+			}
+			.confirm-btn {
+				width: 630upx;
+				height: 76upx;
+				line-height: 76upx;
+				margin-top: 70upx;
+				color: #fff;
+				font-size: $font-lg;
+			}
 		}
-	}
-
-	.wrapper {
-		position: relative;
-		z-index: 90;
-		background: #fff;
-		padding-bottom: 40upx;
+		.register-section {
+			position: absolute;
+			left: 0;
+			bottom: 50upx;
+			width: 100%;
+			padding: 0 50upx;
+			font-size: $font-sm+2upx;
+			color: $font-color-base;
+			text-align: center;
+			
+			.radio {
+				transform:scale(0.7);
+			}
+		
+			text {
+				color: $font-color-spec;
+				margin-left: 10upx;
+			}
+		}
 	}
 
 	.back-btn {
@@ -132,59 +204,5 @@
 		top: 40upx;
 		font-size: 40upx;
 		color: $font-color-dark;
-	}
-
-	.input-content {
-		padding: 0 60upx;
-	}
-
-	.input-item {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		padding: 0 30upx;
-		height: 120upx;
-		margin-bottom: 15upx;
-		border-bottom: 1px solid #d1dfeb;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
-		input {
-			height: 60upx;
-			font-size: $font-base + 2upx;
-			color: $font-color-dark;
-			width: 100%;
-		}
-	}
-
-	.confirm-btn {
-		width: 630upx;
-		height: 76upx;
-		line-height: 76upx;
-		margin-top: 70upx;
-		color: #fff;
-		font-size: $font-lg;
-	}
-
-	.register-section {
-		position: absolute;
-		left: 0;
-		bottom: 50upx;
-		width: 100%;
-		padding: 0 50upx;
-		font-size: $font-sm+2upx;
-		color: $font-color-base;
-		text-align: center;
-		
-		.radio {
-			transform:scale(0.7);
-		}
-
-		text {
-			color: $font-color-spec;
-			margin-left: 10upx;
-		}
 	}
 </style>
